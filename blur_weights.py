@@ -130,10 +130,14 @@ class BlurWeights( object ):
 		# Only use connected verts in which are in the group.  God this part was a bitch to get working.
 		# Also, pre-calculate the guassian weights
 		for x in reversed(range(len(vert_indexes))):
+
+			if hasattr(bm_obj.verts, "ensure_lookup_table"): 
+    				bm_obj.verts.ensure_lookup_table()
+
 			vert = bm_obj.verts[vert_indexes[x]]
-			
+
 			connected_vert = [v.index for edge in vert.link_edges for v in edge.verts if v.index != vert.index and v.index in vert_indexes_test]			
-			
+
 			inclusive_verts = connected_vert + [vert.index]
 			link_edges = [edge for edge in vert.link_edges if edge.verts[0].index in inclusive_verts and edge.verts[1].index in inclusive_verts]
 			if not link_edges:
